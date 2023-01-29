@@ -1,37 +1,150 @@
+<script lang="ts">
+	import z from 'zod';
+	import clsx from 'clsx';
+
+	const formData = {
+		totalAccount: 15000,
+		currentHighPrice: 100,
+		currentLowPrice: 80,
+		riskInPercentage: 2,
+	};
+
+	const calculation = {
+		totalRisk: {
+			title: 'Total Risk',
+			value: 0,
+			additionalClasses: '',
+		},
+		entryAt: {
+			title: 'Entry At',
+			value: 0,
+			additionalClasses: '',
+		},
+		stopLossAt: {
+			title: 'Stop Loss',
+			value: 0,
+			additionalClasses: '',
+		},
+		exitAt: {
+			title: 'Exit',
+			value: 0,
+			additionalClasses: '',
+		},
+		stopLossInMoney: {
+			title: 'Stop Loss (in money)',
+			value: 0,
+			additionalClasses: '',
+		},
+		totalQuantity: {
+			title: 'Total Quantity',
+			value: 0,
+			additionalClasses: '',
+		},
+		totalOrder: {
+			title: 'Total Order Amount',
+			value: 0,
+			additionalClasses: '',
+		},
+		totalTradeInProfit: {
+			title: 'Total Trade (in profit)',
+			value: 0,
+			additionalClasses: 'bg-green-100',
+		},
+		totalTradeInLoss: {
+			title: 'Total Trade (in loss)',
+			value: 0,
+			additionalClasses: 'bg-red-100',
+		},
+	}
+
+	const formValidationSchema = z.object({
+		totalAccount: z.number().min(100),
+		currentHighPrice: z.number().min(0.2),
+		currentLowPrice: z.number().min(0.1),
+		riskInPercentage: z.number().min(0.5),
+	});
+
+	const calculate = async () => {
+		try {
+			const validatedData = await formValidationSchema.parseAsync(formData);
+
+			const entryAtLeadingIncrement = 0.4;
+			const entryAtLeadingMin = 0.75;
+			let entryAtLeading = +((validatedData.currentHighPrice / 100) * entryAtLeadingIncrement).toFixed(2);
+			entryAtLeading = entryAtLeading > entryAtLeadingMin ? entryAtLeading : entryAtLeadingMin;
+	
+			calculation.totalRisk.value = Math.floor((validatedData.totalAccount / 100) * validatedData.riskInPercentage);
+			calculation.entryAt.value = +(validatedData.currentHighPrice + entryAtLeading).toFixed(2);
+			calculation.stopLossAt.value = validatedData.currentLowPrice - Math.ceil(validatedData.currentLowPrice / 100);
+			calculation.stopLossInMoney.value = +(calculation.entryAt.value - calculation.stopLossAt.value).toFixed(2);
+			calculation.exitAt.value = calculation.entryAt.value + Math.floor(calculation.stopLossInMoney.value * 3);
+			calculation.totalQuantity.value = Math.ceil(calculation.totalRisk.value / calculation.stopLossInMoney.value);
+			calculation.totalOrder.value = Math.floor(calculation.entryAt.value * calculation.totalQuantity.value);
+			calculation.totalTradeInProfit.value = Math.floor(calculation.exitAt.value * calculation.totalQuantity.value);
+			calculation.totalTradeInLoss.value = Math.floor(calculation.stopLossAt.value * calculation.totalQuantity.value);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	const onFormSubmit = () => {
+		formData.totalAccount = +formData.totalAccount;
+		formData.currentHighPrice = +formData.currentHighPrice;
+		formData.currentLowPrice = +formData.currentLowPrice;
+		formData.riskInPercentage = +formData.riskInPercentage;
+
+		calculate();
+	};
+	
+	const onInputChange = () => calculate();
+
+	calculate();
+</script>
+
 <section class="flex flex-col items-center justify-center">
 	<div class="section-header text-center mb-6">
 		<h1 class="text-5xl font-semibold text-gray-900">Stocks</h1>
 	</div>
-	<div class="section-body w-full sm:max-w-5xl grid grid-flow-row grid-cols-2 gap-4">
+	<div class="section-body w-full sm:max-w-5xl grid grid-cols-1 gap-4 md:grid-cols-2">
 		<div class="bg-white rounded-lg shadow">
 			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
 				<h2 class="text-xl font-bold leading-tight text-center tracking-tight text-gray-900 md:text-2xl">Risk Calculator</h2>
-				<form class="space-y-4 md:space-y-6" action="#">
+				<form class="space-y-4 md:space-y-6" on:submit|preventDefault={ onFormSubmit }>
 					<div class="form-group">
 						<label for="txtTotalAccount" class="block mb-2 text-sm font-medium text-gray-900">Total Account</label>
-						<input type="text" name="totalAccount" id="txtTotalAccount" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"/>
+						<input type="text" name="totalAccount" id="txtTotalAccount" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.totalAccount }/>
 					</div>
 					<div class="form-group">
 						<label for="txtCurrentHighPrice" class="block mb-2 text-sm font-medium text-gray-900">Current High Price</label>
-						<input type="text" name="currentHighPrice" id="txtCurrentHighPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"/>
+						<input type="text" name="currentHighPrice" id="txtCurrentHighPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.currentHighPrice }/>
 					</div>
 					<div class="form-group">
 						<label for="txtCurrentLowPrice" class="block mb-2 text-sm font-medium text-gray-900">Current Low Price</label>
-						<input type="text" name="currentLowPrice" id="txtCurrentLowPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"/>
+						<input type="text" name="currentLowPrice" id="txtCurrentLowPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.currentLowPrice }/>
 					</div>
 					<div class="form-group">
 						<label for="txtRiskInPercentage" class="block mb-2 text-sm font-medium text-gray-900">Total Risk (in percentage)</label>
-						<input type="text" name="riskInPercentage" id="txtRiskInPercentage" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"/>
+						<input type="text" name="riskInPercentage" id="txtRiskInPercentage" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.riskInPercentage }/>
 					</div>
 					<div class="form-actions">
-						<button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Calculate</button>
+						<button type="submit" class="w-full text-xl text-white bg-blue-600 hover:bg-blue-700 outline-none font-bold rounded-lg px-6 py-4 text-center">Calculate</button>
 					</div>
 				</form>
 			</div>
 		</div>
 		<div class="bg-white rounded-lg shadow grid-cols-2">
 			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-				<h2 class="text-xl font-bold leading-tight text-center tracking-tight text-gray-900 md:text-2xl">Results</h2>
+				<h2 class="text-xl font-bold leading-tight text-center tracking-tight text-gray-900 md:text-2xl">Calculations</h2>
+				<div class="space-y-4 md:space-y-6">
+					<ul class="border-2 rounded">
+						{ #each Object.entries(calculation) as [key, item] }
+							<li class={ clsx('px-4 py-2 border-b-2 last:border-0', item.additionalClasses) }>
+								<span class="text-xl">{ item.title }:</span>
+								<span class="text-xl font-bold">{ item.value }</span>
+							</li>
+						{ /each }
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

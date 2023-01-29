@@ -22,13 +22,13 @@ import FormRiskCalculator from '../components/forms/FormRiskCalculator.svelte';
 		<link rel="stylesheet" href="/assets/css/app.css"/>
 
 	</head>
-	<body class="bg-gray-50">
+	<body class="bg-gray-50 font-body">
 		<div class="app flex flex-col min-h-screen">
-			<main class="py-10 flex-1 flex flex-col justify-center">
-				<FormRiskCalculator/>
+			<main class="py-10 px-6 flex-1 flex flex-col justify-center">
+				<FormRiskCalculator client:visible/>
 			</main>
-			<footer class="px-4 py-6 text-center bg-gray-200">
-				<p class="text-base">Designed & maintained with <span class="text-red-600">♥️</span> by <a href="https://websorcier.com" target="_blank">Web Sorcier</a></p>
+			<footer class="px-3 py-4 text-center bg-gray-200">
+				<p class="text-sm">Designed & maintained with <span class="text-red-600">❤️</span> by <a href="https://websorcier.com" class="text-blue-500 font-semibold" target="_blank">Web Sorcier</a></p>
 			</footer>
 		</div>
 	</body>
