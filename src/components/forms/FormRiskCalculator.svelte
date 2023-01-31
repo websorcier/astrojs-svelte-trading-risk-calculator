@@ -4,8 +4,8 @@
 
 	const formData = {
 		totalAccount: 15000,
-		currentHighPrice: 100,
-		currentLowPrice: 80,
+		highPrice: 100,
+		lowPrice: 80,
 		riskInPercentage: 2,
 	};
 
@@ -15,41 +15,49 @@
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		entryAt: {
 			title: 'Entry At',
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		stopLossAt: {
 			title: 'Stop Loss',
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		exitAt: {
 			title: 'Exit',
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		stopLossInMoney: {
 			title: 'Stop Loss (in money)',
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		totalQuantity: {
 			title: 'Total Quantity',
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		totalOrder: {
 			title: 'Total Order Amount',
 			value: 0,
 			additionalClasses: '',
 		},
+		
 		totalTradeInProfit: {
 			title: 'Total Trade (in profit)',
 			value: 0,
 			additionalClasses: 'bg-green-100',
 		},
+		
 		totalTradeInLoss: {
 			title: 'Total Trade (in loss)',
 			value: 0,
@@ -59,8 +67,8 @@
 
 	const formValidationSchema = z.object({
 		totalAccount: z.number().min(100),
-		currentHighPrice: z.number().min(0.2),
-		currentLowPrice: z.number().min(0.1),
+		highPrice: z.number().min(0.2),
+		lowPrice: z.number().min(0.1),
 		riskInPercentage: z.number().min(0.5),
 	});
 
@@ -70,12 +78,12 @@
 
 			const entryAtLeadingIncrement = 0.4;
 			const entryAtLeadingMin = 0.75;
-			let entryAtLeading = +((validatedData.currentHighPrice / 100) * entryAtLeadingIncrement).toFixed(2);
+			let entryAtLeading = +((validatedData.highPrice / 100) * entryAtLeadingIncrement).toFixed(2);
 			entryAtLeading = entryAtLeading > entryAtLeadingMin ? entryAtLeading : entryAtLeadingMin;
 	
 			calculation.totalRisk.value = Math.floor((validatedData.totalAccount / 100) * validatedData.riskInPercentage);
-			calculation.entryAt.value = +(validatedData.currentHighPrice + entryAtLeading).toFixed(2);
-			calculation.stopLossAt.value = validatedData.currentLowPrice - Math.ceil(validatedData.currentLowPrice / 100);
+			calculation.entryAt.value = +(validatedData.highPrice + entryAtLeading).toFixed(2);
+			calculation.stopLossAt.value = validatedData.lowPrice - Math.ceil(validatedData.lowPrice / 100);
 			calculation.stopLossInMoney.value = +(calculation.entryAt.value - calculation.stopLossAt.value).toFixed(2);
 			calculation.exitAt.value = calculation.entryAt.value + Math.floor(calculation.stopLossInMoney.value * 3);
 			calculation.totalQuantity.value = Math.ceil(calculation.totalRisk.value / calculation.stopLossInMoney.value);
@@ -89,15 +97,13 @@
 
 	const onFormSubmit = () => {
 		formData.totalAccount = +formData.totalAccount;
-		formData.currentHighPrice = +formData.currentHighPrice;
-		formData.currentLowPrice = +formData.currentLowPrice;
+		formData.highPrice = +formData.highPrice;
+		formData.lowPrice = +formData.lowPrice;
 		formData.riskInPercentage = +formData.riskInPercentage;
 
 		calculate();
 	};
 	
-	const onInputChange = () => calculate();
-
 	calculate();
 </script>
 
@@ -115,12 +121,12 @@
 						<input type="text" name="totalAccount" id="txtTotalAccount" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.totalAccount }/>
 					</div>
 					<div class="form-group">
-						<label for="txtCurrentHighPrice" class="block mb-2 text-sm font-medium text-gray-900">Current High Price</label>
-						<input type="text" name="currentHighPrice" id="txtCurrentHighPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.currentHighPrice }/>
+						<label for="txtPreviousHighPrice" class="block mb-2 text-sm font-medium text-gray-900">Previous High Price</label>
+						<input type="text" name="highPrice" id="txtPreviousHighPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.highPrice }/>
 					</div>
 					<div class="form-group">
-						<label for="txtCurrentLowPrice" class="block mb-2 text-sm font-medium text-gray-900">Current Low Price</label>
-						<input type="text" name="currentLowPrice" id="txtCurrentLowPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.currentLowPrice }/>
+						<label for="txtPreviousLowPrice" class="block mb-2 text-sm font-medium text-gray-900">Previous Low Price</label>
+						<input type="text" name="lowPrice" id="txtPreviousLowPrice" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" bind:value={ formData.lowPrice }/>
 					</div>
 					<div class="form-group">
 						<label for="txtRiskInPercentage" class="block mb-2 text-sm font-medium text-gray-900">Total Risk (in percentage)</label>
