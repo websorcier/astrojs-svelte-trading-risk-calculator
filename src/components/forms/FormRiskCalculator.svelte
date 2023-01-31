@@ -15,49 +15,49 @@
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		entryAt: {
 			title: 'Entry At',
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		stopLossAt: {
 			title: 'Stop Loss',
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		exitAt: {
 			title: 'Exit',
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		stopLossInMoney: {
 			title: 'Stop Loss (in money)',
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		totalQuantity: {
 			title: 'Total Quantity',
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		totalOrder: {
 			title: 'Total Order Amount',
 			value: 0,
 			additionalClasses: '',
 		},
-		
+
 		totalTradeInProfit: {
 			title: 'Total Trade (in profit)',
 			value: 0,
 			additionalClasses: 'bg-green-100',
 		},
-		
+
 		totalTradeInLoss: {
 			title: 'Total Trade (in loss)',
 			value: 0,
@@ -107,11 +107,11 @@
 	calculate();
 </script>
 
-<section class="flex flex-col items-center justify-center">
-	<div class="section-header text-center mb-6">
-		<h1 class="text-5xl font-semibold text-gray-900">Stocks</h1>
+<section class="w-full sm:max-w-5xl mx-auto">
+	<div class="section-header text-center mb-10">
+		<h1 class="text-2xl md:text-4xl font-semibold text-gray-900">Stocks Risk & Quantity Calculator</h1>
 	</div>
-	<div class="section-body w-full sm:max-w-5xl grid grid-cols-1 gap-4 md:grid-cols-2">
+	<div class="section-body grid grid-cols-1 gap-4 md:grid-cols-2">
 		<div class="bg-white rounded-lg shadow">
 			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
 				<h2 class="text-xl font-bold leading-tight text-center tracking-tight text-gray-900 md:text-2xl">Risk Calculator</h2>
