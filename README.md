@@ -1,10 +1,5 @@
-# Astro + Svelte Example
+# Stocks Risk Calculator
 
-```
-npm create astro@latest -- --template framework-svelte
-```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/framework-svelte)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/withastro/astro/tree/latest/examples/framework-svelte)
-
-This example showcases Astro working with [Svelte](https://svelte.dev/).
+## Local Development
+- Clone the repository in local via `git clone https://github.com/websorcier/astrojs-svelte-trading-risk-calculator.git`.
+- Run `pnpm/npm/yarn install` to install dependencies.
